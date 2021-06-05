@@ -1,0 +1,6 @@
+Hot module Replacement, you're able to use 
+
+if (module.hot) {
+    module.hot.accept();
+}
+to reload and application from the browser, not a reload 
