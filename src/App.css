@@ -3,8 +3,27 @@
 }
 
 .button1 {
-  border-radius: 0;
-  border-bottom: 1px solid #38BB6C;
+
+  border: #0000
+
+}
+
+.button12 {
+
+
+
+  position:absolute;
+  top: 50%;
+  left: 50%;
+
+  margin: -70px 0 0 -170px;
+
+  border: #0000
+
+}
+
+.layout2 {
+ 
 }
 
 .interactions {
