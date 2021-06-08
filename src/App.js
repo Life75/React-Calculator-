@@ -2,7 +2,6 @@ import logo from "./logo.svg";
 import React, { Component } from "react";
 import styles from "./App.css";
 
-var stack = {};
 
 class App extends Component {
 
@@ -10,23 +9,27 @@ class App extends Component {
         super(props);
         
         this.state = {
-            stack,
+            stack: [],
+            log: [],
+            symbolStack: [],
         };
 
         this.addToStack = this.addToStack.bind(this);
+        this.addToLog = this.addToLog.bind(this);
+
 
     } 
 
     addToStack(num) {
-        
-        var updatedStack = []
+        this.state.stack.push(num)
+        console.log(this.state.stack)
+    }
 
-        updatedStack.push(num)
-
-        //trying to figure out how to add to stack data when button pressed
-        this.setState({ stack: [num, this.state.stack]})
-
-        console.log(stack)
+    addToLog(symbol) {
+        this.state.log.push(this.state.stack)
+        this.state.symbolStack.push(symbol)
+        console.log(this.state.log)
+        //TODO clear out stack this.state.stack.splice(0, this.stack.stack.length())
     }
   
     render() {
@@ -37,6 +40,7 @@ class App extends Component {
                 </div>
                 <LayoutTwo addToStack={this.addToStack}/>
                 <LayoutThree addToStack={this.addToStack}/>
+                <LayoutFour symbol={this.addToLog} solve={this.addToLog}/> 
                 </div>
         );
     }
@@ -107,6 +111,22 @@ const LayoutThree = ({addToStack}) =>
         </Button>
 
     </div> 
+
+const LayoutFour = ({symbol, solve}) =>
+    <div className='layout4'>
+        <Button onClick={() => symbol()}
+        >
+            -
+        </Button>
+
+        <Button onClick={() => symbol()}>
+            +
+        </Button>
+
+        <Button onClick={() => solve()}>
+            =
+        </Button>
+    </div>
 
  
 
