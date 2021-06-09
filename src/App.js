@@ -16,7 +16,9 @@ class App extends Component {
 
         this.addToStack = this.addToStack.bind(this);
         this.addToLog = this.addToLog.bind(this);
-
+        this.solve = this.solve.bind(this);
+        this.getSolution = this.getSolution.bind(this);
+        this.padding = this.padding.bind(this);
 
     } 
 
@@ -25,11 +27,87 @@ class App extends Component {
         console.log(this.state.stack)
     }
 
+    //logs the entire array onto logStack AND logs symbols onto the symbolStack
     addToLog(symbol) {
         this.state.log.push(this.state.stack)
         this.state.symbolStack.push(symbol)
         console.log(this.state.log)
-        //TODO clear out stack this.state.stack.splice(0, this.stack.stack.length())
+
+        //clear list
+        var emptyList = []
+        this.setState({ stack: emptyList })
+    }
+
+    padding(num1, num2) {
+        //which is bigger 
+        if(num1.length() > num2.length()) {
+            console.log('1 is bigger length');
+        }
+        else if(num1.length() < num2.length()) {
+            console.log('2 is bigger length');
+        }
+
+        else {
+            console.log('same size');
+        }
+    }
+
+    getSolution(num1, num2, symbol) {
+
+        if(symbol  == '+') {
+
+            //TODO addition
+
+        }
+
+        else if(symbol == '-') {
+            //Todo Subtraction
+        }
+
+        else if(symbol == '*') {
+            //TODO Mulitplication (later verision)
+        }
+
+        else if(symbol == '/') {
+            //TODO division (later version)
+        }
+
+
+    }
+
+    //Equal symbol pressed, solve the given problem 
+    solve(){
+        //gets 2 numbers and a symbol popped from symbol stack
+        var num1, num2
+
+        num1 = this.state.log.pop()
+
+        var arr = []
+
+        arr[0] =  num1
+    
+
+        if(this.state.log.pop() == null) {
+
+            num2 =  this.state.stack
+            
+        }
+        else {
+            num2 = this.state.log.pop()
+        }
+
+        var symbol = this.state.symbolStack.pop()
+
+        //this.padding(num1, num2)
+        this.getSolution(num1, num2, symbol)
+        
+        
+       
+
+        console.log(num1 + ' '+ symbol + ' '+ num2 )
+
+        console.log(num1+num2)
+        console.log(arr[0])
     }
   
     render() {
@@ -40,7 +118,7 @@ class App extends Component {
                 </div>
                 <LayoutTwo addToStack={this.addToStack}/>
                 <LayoutThree addToStack={this.addToStack}/>
-                <LayoutFour symbol={this.addToLog} solve={this.addToLog}/> 
+                <LayoutFour symbol={this.addToLog} solve={this.solve}/> 
                 </div>
         );
     }
@@ -114,12 +192,12 @@ const LayoutThree = ({addToStack}) =>
 
 const LayoutFour = ({symbol, solve}) =>
     <div className='layout4'>
-        <Button onClick={() => symbol()}
+        <Button onClick={() => symbol('-')}
         >
             -
         </Button>
 
-        <Button onClick={() => symbol()}>
+        <Button onClick={() => symbol('+')}>
             +
         </Button>
 
