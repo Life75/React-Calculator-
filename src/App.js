@@ -36,20 +36,39 @@ class App extends Component {
         //clear list
         var emptyList = []
         this.setState({ stack: emptyList })
-    }
+    }//a
 
-    padding(num1, num2) {
+    padding(num1, num2, symbol) {
         //which is bigger 
-        if(num1.length() > num2.length()) {
+        if(num1.length > num2.length) {
             console.log('1 is bigger length');
+
+            var numDifference = (num1.length) - (num2.length);
+
+            console.log(numDifference)
+
+            for(var i=0; i < numDifference; i++) {
+                num2.unshift(0)
+            }
+
         }
-        else if(num1.length() < num2.length()) {
+        else if(num1.length < num2.length) {
             console.log('2 is bigger length');
+          
+            var numDifference = (num2.length) - (num1.length);
+
+            console.log(numDifference)
+
+            for(var i=0; i < numDifference; i++) {
+                num1.unshift(0)
+            }
+
+        }
+        else {
+            console.log("default")
         }
 
-        else {
-            console.log('same size');
-        }
+        //this.getSolution(num1, num2, symbol)
     }
 
     getSolution(num1, num2, symbol) {
@@ -78,13 +97,11 @@ class App extends Component {
     //Equal symbol pressed, solve the given problem 
     solve(){
         //gets 2 numbers and a symbol popped from symbol stack
-        var num1, num2
+        
+        //while(this.state.log.pop() != null)
+        var num1, num2 = new Array()
 
         num1 = this.state.log.pop()
-
-        var arr = []
-
-        arr[0] =  num1
     
 
         if(this.state.log.pop() == null) {
@@ -98,16 +115,13 @@ class App extends Component {
 
         var symbol = this.state.symbolStack.pop()
 
-        //this.padding(num1, num2)
-        this.getSolution(num1, num2, symbol)
+        //console.log('here: ' + num1.valueOf())
+        this.padding(num1, num2, symbol)
+                
         
-        
-       
+       //clear out contents completely 
 
-        console.log(num1 + ' '+ symbol + ' '+ num2 )
-
-        console.log(num1+num2)
-        console.log(arr[0])
+        //console.log(num1 + ' '+ symbol + ' '+ num2 )
     }
   
     render() {
