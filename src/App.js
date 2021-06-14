@@ -51,6 +51,8 @@ class App extends Component {
                 num2.unshift(0)
             }
 
+            console.log(num2)
+
         }
         else if(num1.length < num2.length) {
             console.log('2 is bigger length');
@@ -68,28 +70,77 @@ class App extends Component {
             console.log("default")
         }
 
-        //this.getSolution(num1, num2, symbol)
+        return this.getSolution(num1, num2, symbol)
     }
 
     getSolution(num1, num2, symbol) {
 
+        var finalSolution = []
+
         if(symbol  == '+') {
 
-            //TODO addition
+            console.log('adding')
+            
+            var carry = 0
 
+            while(num1.length != 0) {
+                var intOne = num1.pop();
+                var intTwo = num2.pop();
+                var finalDigit;
+
+
+                if (intOne + intTwo + carry < 10) {
+                    finalDigit = intOne + intTwo + carry;
+                    carry =0
+                }
+                else {
+                    finalDigit = intOne + intTwo + carry - 10;
+                    carry =1
+                }
+
+                finalSolution.unshift(finalDigit)
+
+
+
+
+
+            }
         }
 
         else if(symbol == '-') {
-            //Todo Subtraction
+            //TODO redo whole algo
+            console.log('subtract')
+
+            var carry=0;
+
+            while(num1.length != 0) {
+                var intOne = num1.pop();
+                var intTwo = num2.pop();
+                var finalDigit;
+
+                if (intTwo - intOne - carry < 0) {
+                    finalDigit = (intTwo+10) - intOne - carry;
+                    carry=1;
+                }
+                else { 
+                    finalDigit = intTwo - intOne - carry;
+                    carry=0;
+                }
+                finalSolution.unshift(finalDigit)
+                
+            }
+
         }
 
         else if(symbol == '*') {
-            //TODO Mulitplication (later verision)
+            //TODO Mulitplication (later ver)
         }
 
         else if(symbol == '/') {
-            //TODO division (later version)
+            //TODO division (later ver)
         }
+        console.log(finalSolution)
+        return finalSolution
 
 
     }
@@ -116,7 +167,7 @@ class App extends Component {
         var symbol = this.state.symbolStack.pop()
 
         //console.log('here: ' + num1.valueOf())
-        this.padding(num1, num2, symbol)
+        var finalSolution = this.padding(num1, num2, symbol)
                 
         
        //clear out contents completely 
