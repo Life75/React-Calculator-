@@ -27,6 +27,7 @@ class App extends Component {
         this.addToLog = this.addToLog.bind(this);
         this.solve = this.solve.bind(this);
         this.getSolution = this.getSolution.bind(this);
+        this.convertToString = this.convertToString.bind(this);
 
     } 
 
@@ -45,74 +46,25 @@ class App extends Component {
         var emptyList = []
         this.setState({ stack: emptyList })
     }
-/*
-    padding(num1, num2, symbol) {
-        //which is bigger 
-        if(num1.length > num2.length) {
-            console.log('1 is bigger length');
 
-            var numDifference = (num1.length) - (num2.length);
-
-            console.log(numDifference)
-
-            for(var i=0; i < numDifference; i++) {
-                num2.unshift(0)
-            }
-
-        }
-        else if(num1.length < num2.length) {
-            console.log('2 is bigger length');
-          
-            var numDifference = (num2.length) - (num1.length);
-
-            console.log(numDifference)
-
-            for(var i=0; i < numDifference; i++) {
-                num1.unshift(0)
-            }
-
-        }
-        else {
-            console.log("default")
-        }
-
-        //this.getSolution(num1, num2, symbol)
-    }
-*/
     getSolution(num1, num2, symbol) {
-
         var intOne ='';
         var intTwo ='';
+        var solution;
 
         if(symbol  == '+') {
+            intOne = this.convertToString(num1);      
+            intTwo = this.convertToString(num2);
+            console.log('adding: ... ' + intOne + ' + ' + intTwo + '=' + math.add(intOne, intTwo));
+            solution = math.add(intOne, intTwo);
 
-            //TODO addition
-
-            while(num1.length > 0) {
-               intOne += String(num1.shift())
-            }
-
-            while(num2.length > 0) {
-                intTwo += String(num2.shift())
-            }
-
-            
-            console.log(math.add(intOne, intTwo));
         }
 
         else if(symbol == '-') {
-            //Todo Subtraction
-
-            while(num1.length > 0) {
-                intOne += String(num1.shift())
-             }
- 
-             while(num2.length > 0) {
-                 intTwo += String(num2.shift())
-             }
- 
-             
-             console.log(math.subtract(intOne, intTwo));
+            intOne = this.convertToString(num1);
+            intTwo = this.convertToString(num2);
+            //console.log(math.subtract(intOne, intTwo));
+            solution = math.subtract(intOne,intTwo);
         }
 
         else if(symbol == '*') {
@@ -123,37 +75,66 @@ class App extends Component {
             //TODO division (later version)
         }
 
+        return solution;
+    }
 
+
+
+    convertToString(num) {
+        var string = '';
+        console.log(num);
+        while(num.length > 0) {
+            string += String(num.shift())
+        }
+        return string;
     }
 
     //Equal symbol pressed, solve the given problem 
     solve(){
         //gets 2 numbers and a symbol popped from symbol stack
-        
-        //while(this.state.log.pop() != null)
         var num1, num2 = new Array()
 
-        num1 = this.state.log.pop()
-    
+        
+        num1 = this.state.log.pop();
+        
 
-        if(this.state.log.pop() == null) {
 
-            num2 =  this.state.stack
+        if(this.state.log.length === 0) {
+
+            num2 =  this.state.stack;
             
         }
         else {
-            num2 = this.state.log.pop()
+            num2 = this.state.log.pop();
+            this.state.log.push(this.state.stack);
         }
+
+     
 
         var symbol = this.state.symbolStack.pop()
 
-        //console.log('here: ' + num1.valueOf())
-        this.getSolution(num1, num2, symbol);
+        console.log(num1 + ' '+ symbol + 'here '+ num2 )
+
+        var solution = this.getSolution(num1, num2, symbol);
+
+        while (this.state.log.length > 0) {
+            console.log(this.state.log.length + ' log length')
+            num1 = this.state.log.pop();
+            symbol = this.state.symbolStack.pop();
+            console.log(num1 + ' '+ symbol + ' d'+ solution);
+            var arr  =  [solution];
+            solution = this.getSolution(num1, arr, symbol);
+            console.log(solution);
+            
+
+
+        }
+
+
                 
         
        //clear out contents completely 
 
-        //console.log(num1 + ' '+ symbol + ' '+ num2 )
     }
   
     render() {
