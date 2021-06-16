@@ -1,6 +1,15 @@
 import logo from "./logo.svg";
 import React, { Component } from "react";
 import styles from "./App.css";
+const {create, all} = require  ('mathjs')
+
+const config = {
+
+    number: 'BigNumber',
+    precision: 20
+}
+
+const math = create(all, config)
 
 
 class App extends Component {
@@ -18,7 +27,6 @@ class App extends Component {
         this.addToLog = this.addToLog.bind(this);
         this.solve = this.solve.bind(this);
         this.getSolution = this.getSolution.bind(this);
-        this.padding = this.padding.bind(this);
 
     } 
 
@@ -36,8 +44,8 @@ class App extends Component {
         //clear list
         var emptyList = []
         this.setState({ stack: emptyList })
-    }//a
-
+    }
+/*
     padding(num1, num2, symbol) {
         //which is bigger 
         if(num1.length > num2.length) {
@@ -70,17 +78,41 @@ class App extends Component {
 
         //this.getSolution(num1, num2, symbol)
     }
-
+*/
     getSolution(num1, num2, symbol) {
+
+        var intOne ='';
+        var intTwo ='';
 
         if(symbol  == '+') {
 
             //TODO addition
 
+            while(num1.length > 0) {
+               intOne += String(num1.shift())
+            }
+
+            while(num2.length > 0) {
+                intTwo += String(num2.shift())
+            }
+
+            
+            console.log(math.add(intOne, intTwo));
         }
 
         else if(symbol == '-') {
             //Todo Subtraction
+
+            while(num1.length > 0) {
+                intOne += String(num1.shift())
+             }
+ 
+             while(num2.length > 0) {
+                 intTwo += String(num2.shift())
+             }
+ 
+             
+             console.log(math.subtract(intOne, intTwo));
         }
 
         else if(symbol == '*') {
@@ -116,7 +148,7 @@ class App extends Component {
         var symbol = this.state.symbolStack.pop()
 
         //console.log('here: ' + num1.valueOf())
-        this.padding(num1, num2, symbol)
+        this.getSolution(num1, num2, symbol);
                 
         
        //clear out contents completely 
