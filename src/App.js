@@ -10,6 +10,9 @@ const config = {
 
 const math = create(all, config)
 
+
+//TODO 1. Move calculator to the right side, add in multiple and divide func,  2.clean up code and surrounding extras 3. Place credits  
+
 class App extends Component {
 
     constructor(props) {
@@ -50,12 +53,6 @@ class App extends Component {
             }
         }
     }
-
-    updateDisplaySolution(char) {
-        document.getElementById('')
-    }
-
-
 
     addToStack(num) {
         this.state.stack.push(num)
@@ -180,7 +177,7 @@ const Display = ({updateDisplay}) =>
 
 
 const LayoutOne = ({addToStack}) =>
-        <div className ="button1">
+        <div className ="layout1">
 
 
         <Button onClick={() => addToStack(7)}
