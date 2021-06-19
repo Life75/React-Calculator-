@@ -4,13 +4,11 @@ import styles from "./App.css";
 const {create, all} = require  ('mathjs')
 
 const config = {
-
     number: 'BigNumber',
     precision: 20
 }
 
 const math = create(all, config)
-
 
 class App extends Component {
 
@@ -21,6 +19,7 @@ class App extends Component {
             stack: [],
             log: [],
             symbolStack: [],
+            clearAfter: false,
         };
 
         this.addToStack = this.addToStack.bind(this);
@@ -28,11 +27,39 @@ class App extends Component {
         this.solve = this.solve.bind(this);
         this.getSolution = this.getSolution.bind(this);
         this.convertToString = this.convertToString.bind(this);
+        this.updateDisplay = this.updateDisplay.bind(this);
 
     } 
 
+    updateDisplay(char, isSolving) {
+
+        if(isSolving) {
+            document.getElementById('display').innerHTML = char;
+            this.setState({clearAfter: true});
+        }
+        else {
+            var displayText ='';
+            if (this.state.clearAfter) {
+                document.getElementById('display').innerHTML = char;
+                this.setState({clearAfter: false});
+            }
+            else {
+                displayText = document.getElementById('display').innerHTML;
+                displayText += char;
+                document.getElementById('display').innerHTML = displayText;
+            }
+        }
+    }
+
+    updateDisplaySolution(char) {
+        document.getElementById('')
+    }
+
+
+
     addToStack(num) {
         this.state.stack.push(num)
+        this.updateDisplay(num,false)
         console.log(this.state.stack)
     }
 
@@ -41,6 +68,7 @@ class App extends Component {
         this.state.log.push(this.state.stack)
         this.state.symbolStack.push(symbol)
         console.log(this.state.log)
+        this.updateDisplay(symbol, false)
 
         //clear list
         var emptyList = []
@@ -97,12 +125,8 @@ class App extends Component {
         
         num1 = this.state.log.pop();
         
-
-
         if(this.state.log.length === 0) {
-
             num2 =  this.state.stack;
-            
         }
         else {
             num2 = this.state.log.pop();
@@ -112,9 +136,7 @@ class App extends Component {
      
 
         var symbol = this.state.symbolStack.pop()
-
-        console.log(num1 + ' '+ symbol + 'here '+ num2 )
-
+        //console.log(num1 + ' '+ symbol + 'here '+ num2 )
         var solution = this.getSolution(num1, num2, symbol);
 
         while (this.state.log.length > 0) {
@@ -125,22 +147,16 @@ class App extends Component {
             var arr  =  [solution];
             solution = this.getSolution(num1, arr, symbol);
             console.log(solution);
-            
-
-
         }
 
-
-                
-        
-       //clear out contents completely 
-
+        this.updateDisplay(solution,true);
     }
   
     render() {
         return (
             <div className="page">
                 <div className=''>
+                    <Display/>
                     <LayoutOne addToStack={this.addToStack}/>
                 </div>
                 <LayoutTwo addToStack={this.addToStack}/>
@@ -150,6 +166,16 @@ class App extends Component {
         );
     }
 }
+
+
+const Display = ({updateDisplay}) => 
+    <div className='Display'>
+        <Label>
+
+        </Label>
+    </div>
+
+
 
 
 
@@ -231,6 +257,7 @@ const LayoutFour = ({symbol, solve}) =>
         <Button onClick={() => solve()}>
             =
         </Button>
+
     </div>
 
  
@@ -244,7 +271,17 @@ const LayoutFour = ({symbol, solve}) =>
         {children}
         </button>
 
-    
+
+const Label = ({id , className='', children}) =>
+    <label
+        id='display'
+        className={className}
+        type="text"
+        >
+            {children}
+    </label>
+
+
 
 
 

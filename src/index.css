@@ -43,3 +43,11 @@ button:hover {
 *:focus {
   outline: none;
 }
+
+
+label {
+  color: #808080;
+  font-weight: bold;
+  display: block;
+  text-align: right;
+}
