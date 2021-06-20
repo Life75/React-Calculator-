@@ -1,17 +1,16 @@
-import logo from "./logo.svg";
+
 import React, { Component } from "react";
-import styles from "./App.css";
+import "./App.css";
 const {create, all} = require  ('mathjs')
+
+//Calculator made using React by Austyn Washington 6/19/2021
 
 const config = {
     number: 'BigNumber',
     precision: 20
 }
 
-const math = create(all, config)
-
-
-//TODO 1. Move calculator to the right side, add in multiple and divide func,  2.clean up code and surrounding extras 3. Place credits  
+const math = create(all, config)  
 
 class App extends Component {
 
@@ -22,7 +21,7 @@ class App extends Component {
             stack: [],
             log: [],
             symbolStack: [],
-            clearAfter: false,
+            clearAfter: true,
         };
 
         this.addToStack = this.addToStack.bind(this);
@@ -31,11 +30,9 @@ class App extends Component {
         this.getSolution = this.getSolution.bind(this);
         this.convertToString = this.convertToString.bind(this);
         this.updateDisplay = this.updateDisplay.bind(this);
-
     } 
 
     updateDisplay(char, isSolving) {
-
         if(isSolving) {
             document.getElementById('display').innerHTML = char;
             this.setState({clearAfter: true});
@@ -57,14 +54,12 @@ class App extends Component {
     addToStack(num) {
         this.state.stack.push(num)
         this.updateDisplay(num,false)
-        console.log(this.state.stack)
     }
 
     //logs the entire array onto logStack AND logs symbols onto the symbolStack
     addToLog(symbol) {
         this.state.log.push(this.state.stack)
         this.state.symbolStack.push(symbol)
-        console.log(this.state.log)
         this.updateDisplay(symbol, false)
 
         //clear list
@@ -76,77 +71,56 @@ class App extends Component {
         var intOne ='';
         var intTwo ='';
         var solution;
+        intOne = this.convertToString(num1);      
+        intTwo = this.convertToString(num2);
 
-        if(symbol  == '+') {
-            intOne = this.convertToString(num1);      
-            intTwo = this.convertToString(num2);
-            console.log('adding: ... ' + intOne + ' + ' + intTwo + '=' + math.add(intOne, intTwo));
-            solution = math.add(intOne, intTwo);
-
-        }
-
-        else if(symbol == '-') {
-            intOne = this.convertToString(num1);
-            intTwo = this.convertToString(num2);
-            //console.log(math.subtract(intOne, intTwo));
-            solution = math.subtract(intOne,intTwo);
-        }
-
-        else if(symbol == '*') {
-            //TODO Mulitplication (later verision)
-        }
-
-        else if(symbol == '/') {
-            //TODO division (later version)
-        }
-
+        if(symbol  === '+') solution = math.add(intOne, intTwo);
+        else if(symbol === '-') solution = math.subtract(intOne,intTwo);
+        else if(symbol ==='*') solution = math.multiply(intOne, intTwo);
+        else if(symbol === '/') solution = math.divide(intOne, intTwo);
+        
         return solution;
     }
 
 
-
     convertToString(num) {
         var string = '';
-        console.log(num);
-        while(num.length > 0) {
+
+        while(num.length > 0) 
             string += String(num.shift())
-        }
         return string;
     }
 
     //Equal symbol pressed, solve the given problem 
     solve(){
         //gets 2 numbers and a symbol popped from symbol stack
-        var num1, num2 = new Array()
-
-        
-        num1 = this.state.log.pop();
-        
-        if(this.state.log.length === 0) {
-            num2 =  this.state.stack;
-        }
-        else {
-            num2 = this.state.log.pop();
-            this.state.log.push(this.state.stack);
-        }
-
-     
-
-        var symbol = this.state.symbolStack.pop()
-        //console.log(num1 + ' '+ symbol + 'here '+ num2 )
-        var solution = this.getSolution(num1, num2, symbol);
-
-        while (this.state.log.length > 0) {
-            console.log(this.state.log.length + ' log length')
+        try {
+            var num1, num2 = new Array()  
             num1 = this.state.log.pop();
-            symbol = this.state.symbolStack.pop();
-            console.log(num1 + ' '+ symbol + ' d'+ solution);
-            var arr  =  [solution];
-            solution = this.getSolution(num1, arr, symbol);
-            console.log(solution);
-        }
+            
+            if(this.state.log.length === 0) {
+                num2 = this.state.stack;
+            }
+            else {
+                num2 = this.state.log.pop();
+                this.state.log.push(this.state.stack);
+            }
 
-        this.updateDisplay(solution,true);
+            var symbol = this.state.symbolStack.pop()
+            var solution = this.getSolution(num1, num2, symbol);
+
+            while (this.state.log.length > 0) {
+                num1 = this.state.log.pop();
+                symbol = this.state.symbolStack.pop();
+                var arr  =  [solution];
+                solution = this.getSolution(num1, arr, symbol);
+            }
+
+            this.updateDisplay(solution,true);
+        }
+        catch(err) {
+            document.getElementById('display').innerHTML = 'error'
+        }
     }
   
     render() {
@@ -156,30 +130,24 @@ class App extends Component {
                     <Display/>
                     <LayoutOne addToStack={this.addToStack}/>
                 </div>
-                <LayoutTwo addToStack={this.addToStack}/>
-                <LayoutThree addToStack={this.addToStack}/>
-                <LayoutFour symbol={this.addToLog} solve={this.solve}/> 
+                    <LayoutTwo addToStack={this.addToStack}/>
+                    <LayoutThree addToStack={this.addToStack}/>
+                    <LayoutFour symbol={this.addToLog} addToStack={this.addToStack}/>
+                    <LayoutFive symbol={this.addToLog} solve={this.solve}/>
                 </div>
         );
     }
 }
 
-
 const Display = ({updateDisplay}) => 
     <div className='Display'>
         <Label>
-
+            Calculator made by Austyn Washington using React
         </Label>
     </div>
 
-
-
-
-
 const LayoutOne = ({addToStack}) =>
         <div className ="layout1">
-
-
         <Button onClick={() => addToStack(7)}
         >
             7
@@ -194,14 +162,10 @@ const LayoutOne = ({addToStack}) =>
         >
             9
         </Button>
-
         </div>
-
-
 
 const LayoutTwo = ({addToStack}) =>
     <div className = 'layout2'>
-
         <Button onClick={() => addToStack(4)}
         >
             4
@@ -217,12 +181,10 @@ const LayoutTwo = ({addToStack}) =>
         >
             6
         </Button>
-
     </div> 
 
 const LayoutThree = ({addToStack}) =>
     <div className = 'layout3'>
-
         <Button onClick={() => addToStack(1)}
         >
             1
@@ -237,11 +199,16 @@ const LayoutThree = ({addToStack}) =>
         >
             3
         </Button>
-
     </div> 
 
-const LayoutFour = ({symbol, solve}) =>
+const LayoutFour = ({symbol, addToStack}) =>
     <div className='layout4'>
+
+        <Button onClick={() => addToStack(0)}
+        >
+            0
+        </Button>
+
         <Button onClick={() => symbol('-')}
         >
             -
@@ -251,13 +218,24 @@ const LayoutFour = ({symbol, solve}) =>
             +
         </Button>
 
+    </div>
+
+const LayoutFive = ({symbol, solve}) =>
+    <div className='layout5'>
+        <Button onClick={() => symbol('*')}
+        >
+            *
+        </Button>
+
+        <Button onClick={() => symbol('*')}
+        >
+            ÷
+        </Button>
+
         <Button onClick={() => solve()}>
             =
         </Button>
-
     </div>
-
- 
 
  const Button = ({onClick, className= '', children}) =>
     <button
@@ -268,7 +246,6 @@ const LayoutFour = ({symbol, solve}) =>
         {children}
         </button>
 
-
 const Label = ({id , className='', children}) =>
     <label
         id='display'
@@ -278,8 +255,4 @@ const Label = ({id , className='', children}) =>
             {children}
     </label>
 
-
-
-
-
-export default App; //The name of the class that extends to component that you'll be displaying
+export default App; 

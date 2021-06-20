@@ -27,13 +27,11 @@ input {
   border: 1px solid #dddddd;
 }
 
-.layout1 {
-}
 
 button {
-  padding: 3%;
+  padding: 10%;
   font-size: 250%;
-  border-radius: 5px;
+  border-radius: 25%;
   border: 1px solid #dddddd;
   background: transparent;
   color: #808080;
