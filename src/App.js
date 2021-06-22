@@ -22,6 +22,7 @@ class App extends Component {
             log: [],
             symbolStack: [],
             clearAfter: true,
+            doubleSymbolSwitch: false,
         };
 
         this.addToStack = this.addToStack.bind(this);
@@ -54,17 +55,21 @@ class App extends Component {
     addToStack(num) {
         this.state.stack.push(num)
         this.updateDisplay(num,false)
+        this.setState({doubleSymbolSwitch: false});
     }
 
     //logs the entire array onto logStack AND logs symbols onto the symbolStack
     addToLog(symbol) {
-        this.state.log.push(this.state.stack)
-        this.state.symbolStack.push(symbol)
-        this.updateDisplay(symbol, false)
-
-        //clear list
-        var emptyList = []
-        this.setState({ stack: emptyList })
+        if (!this.state.doubleSymbolSwitch) {
+            this.state.log.push(this.state.stack)
+            this.state.symbolStack.push(symbol)
+            this.updateDisplay(symbol, false)
+           
+            //clear list
+            var emptyList = []
+            this.setState({ stack: emptyList, doubleSymbolSwitch: true })
+        }
+        
     }
 
     getSolution(num1, num2, symbol) {
@@ -77,7 +82,10 @@ class App extends Component {
         if(symbol  === '+') solution = math.add(intOne, intTwo);
         else if(symbol === '-') solution = math.subtract(intOne,intTwo);
         else if(symbol ==='*') solution = math.multiply(intOne, intTwo);
-        else if(symbol === '/') solution = math.divide(intOne, intTwo);
+        else if(symbol === '/') {
+            solution = math.divide(intOne, intTwo);
+            if(solution == 'Infinity') solution = 'error';
+        } 
         
         return solution;
     }
@@ -142,7 +150,7 @@ class App extends Component {
 const Display = ({updateDisplay}) => 
     <div className='Display'>
         <Label>
-            Calculator made by Austyn Washington using React
+            Calculator made in React by Austyn Washington
         </Label>
     </div>
 
@@ -227,7 +235,7 @@ const LayoutFive = ({symbol, solve}) =>
             *
         </Button>
 
-        <Button onClick={() => symbol('*')}
+        <Button onClick={() => symbol('/')}
         >
             ÷
         </Button>
